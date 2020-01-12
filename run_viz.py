@@ -44,8 +44,9 @@ def run():
     grouped_data["type"] = pd.Categorical(grouped_data["type"], categories=list_ordering, ordered=True)
     grouped_data["unit"] = grouped_data['unit'].apply(lambda k: unit_translation[k])
 
+    sns.set_style("whitegrid")
     # Create an array with the colors you want to use
-    colors = ["#2b56ff", "#0c780c", "#db0a07", "#0a0606"]
+    colors = ['#66b3ff','#99ff99','#ff9999','#808080']
     # Set your custom color palette
     customPalette = sns.set_palette(sns.color_palette(colors))
 
@@ -57,6 +58,29 @@ def run():
         .despine(left=True))
     sns.set(font_scale=1)
     plt.savefig('grouped_data.png')
+
+    # Pie chart
+
+    for u in grouped_data['unit'].unique():
+        mini = grouped_data[grouped_data['unit'] == u]
+        labels = mini['type']
+        sizes = mini['count']
+        
+        #colors
+        colors = ['#808080','#ff9999','#99ff99','#66b3ff']
+
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, colors = colors, labels=labels, autopct='%1.1f%%', startangle=90, pctdistance=.55)
+        #draw circle
+        centre_circle = plt.Circle((0,0),0.70,fc='white')
+        fig = plt.gcf()
+        fig.gca().add_artist(centre_circle)
+        # Equal aspect ratio ensures that pie is drawn as a circle
+        plt.title(u)
+        ax1.axis('equal')  
+        plt.tight_layout()
+        plt.savefig(f'{u}_circle.png')
+        plt.show()
 
 if __name__ == '__main__':
     run()
