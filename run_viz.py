@@ -55,7 +55,9 @@ def run():
 
         data['timestamp'] = data['timestamp'].apply(convert)
         data['count'] = 1
-        print(f'Total responses: {len(data)}')
+        print(f'Before deduping: {data.shape}')
+        data = data.drop_duplicates(['timestamp', 'type'])
+        print(f'Total responses after deduping: {len(data)}')
         grouped_data = data.groupby(['type'])['count'].sum().reset_index()
 
 
